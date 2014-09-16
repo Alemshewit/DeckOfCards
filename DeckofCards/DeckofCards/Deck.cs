@@ -29,6 +29,7 @@ namespace DeckofCards
             }
         }
 
+        //"Fisher-Yates shuffle" from stackoverflow
         public void Shuffle()
         {
             Random shuffle = new Random();
@@ -41,18 +42,23 @@ namespace DeckofCards
             }
         }
 
+        //Print the cards
         public void PrintDeck()
         {
             Console.WriteLine(string.Join("\n", this.Cards.Select(x => x.GetCardString())));
         }
 
+        //Deal a certain number of cards
         public List<Card> Deal(int numCards)
         {
             List<Card> hand = new List<Card>();
             for (int i = 0; i < numCards; i++)
             {
+                //Add last card to hand
                 hand.Add(Cards.Last());
+                //Add to drawn deck
                 DealtCards.Add(Cards.Last());
+                //Remove from other deck
                 Cards.Remove(Cards.Last());
             }
             return hand;
