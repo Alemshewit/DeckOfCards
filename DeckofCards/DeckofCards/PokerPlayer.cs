@@ -56,7 +56,7 @@ namespace DeckofCards
             else return false;
         }
 
-        //2 distinct sets with 1 being 4
+        //2 distinct ranks with 1 containing 4 values
         public bool HasFourOfAKind()
         {
             if (this.Cards.Select(x => x.Rank).Distinct().Count() == 2)
@@ -66,6 +66,8 @@ namespace DeckofCards
             }
             else return false;
         }
+        
+        //2 distinct ranks with one containing 3 values
         public bool HasFullHouse()
         {
             if (this.Cards.Select(x => x.Rank).Distinct().Count() == 2)
@@ -76,11 +78,14 @@ namespace DeckofCards
             else return false;
         }
 
+        //Checks for 1 distinct suit
         public bool HasFlush()
         {
             return this.Cards.Select(x => x.Suit).Distinct().Count() == 1;
         }
 
+        //Takes distinct cards, orders them, subtracts the value of the highest and lowest to see if it equals 4
+        //It will only ever equal four if the cards are in order
         public bool HasStraight()
         {
             if (this.Cards.Select(x => x.Rank).Distinct().OrderBy(x => x).Last() - this.Cards.Select(x => x.Rank).Distinct().OrderBy(x => x).First() == 4)
@@ -90,27 +95,30 @@ namespace DeckofCards
             else return false;
         }
 
+        //Group and check to see if any of the groups have a count of 3
         public bool HasThreeOfAKind()
         {
-            //Grouping
             IEnumerable<IGrouping<Rank, Card>> group = this.Cards.GroupBy(x => x.Rank);
             return group.Any(x => x.Count() == 3);
         }
 
+        //2 groups with 2 values (cards)
         public bool HasTwoPair()
         {
             return this.Cards.GroupBy(x => x.Rank).Where(x => x.Count() == 2).Count() == 2;
         }
 
+        //4 distinct values = 1 value is the same => 1 pair
         public bool HasPair()
         {
             return this.Cards.Select(x => x.Rank).Distinct().Count() == 4;
         }
        
+       //If all other bools return false, the player has a high card
         public void HasHighCard()
         {
             if (HasPair() == false && HasTwoPair() == false && HasThreeOfAKind() == false && HasStraight() == false && HasFlush() == false && HasFullHouse() == false
-                && HasFourOfAKind() == false && HasStraightFlush() == false && HasRoyalFlush() == false)
+                && HasFourOfAKind() == false && HasStraightFlush() == false)
             {
                 Console.WriteLine("High card of: " + this.Cards.Select(x => x.Rank).OrderBy(x => x).Last().ToString());
             }
